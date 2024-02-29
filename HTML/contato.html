@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+</head>
+
+<body class="contato">
+    <header>
+        <div class="logo-container">
+            <iconify-icon icon="ph:code-bold" style="color: white;" width="35" height="35"></iconify-icon>
+            <span class="logo-texto">Igor Oliveira Silva</span>
+        </div>
+        <input type="text" class="header__search" placeholder="Pesquisar">
+        <nav id="navbar">
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="contato__container">
+        <div class="contato__coluna_container">
+            <h2 class="localizacao__title">Localização</h2>
+            <div class="localizacao__container">
+                <p class="localizacao__text"> Jackson Blvd Ste 1020 Chicago</p>
+                <p>IL 60604-2340</p>
+            </div>
+            <div class="siga__container">
+                <h2 class="siga__title">Siga-nos</h2>
+                <div class="redes__container">
+                    <a href="#">
+                        <iconify-icon class="redes__icons" icon="entypo-social:facebook-with-circle"
+                            style="color: #a80000;" width="20" height="20"></iconify-icon>
+                    </a>
+                    <a href="#">
+                        <iconify-icon class="redes__icons" icon="formkit:twitter" style="color: #a80000;" width="20"
+                            height="20"></iconify-icon>
+                    </a>
+                    <a href="#">
+                        <iconify-icon class="redes__icons" icon="entypo-social:instagram-with-circle"
+                            style="color: #a80000;" width="20" height="20"></iconify-icon>
+                    </a>
+                    <a href="#">
+                        <iconify-icon class="redes__icons" icon="fa6-brands:google-plus" style="color: #a80000;"
+                            width="20" height="20"></iconify-icon>
+                    </a>
+                </div>
+                <span class="siga__direitos">&copy; 2018 Política de privacidade</span>
+            </div>
+        </div>
+        <div class="form__container">
+            <h2 class="form__title">Formulário de Contato</h2>
+            <form method="post">
+                <input type="text" name="nome" id="nome" placeholder="Enter your name">
+                <input type="email" name="email" id="email" placeholder="Enter a valid email address">
+                <textarea name="message" id="message" cols="30" rows="10" placeholder="Enter your message"></textarea>
+                <button type="submit" class="btn__submit">Enviar</button>
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>
