@@ -1,3 +1,5 @@
+import { Pokemon } from './classes/Pokemon.js';
+
 const searchedPokemonContainer = document.getElementById('pokemon-search-container');
 const favoritesPokemonsContainer = document.getElementById('favorites-container');
 const closeModalButton = document.querySelector('.close');
@@ -35,16 +37,20 @@ export async function fetchPokemon(name) {
 }
 
 function capitalizeFirstLetter(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
+    if (typeof word === 'string' && word.length > 0) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    } else {
+        return '';
+    }
 }
 
-function updateSearchedPokemonDisplay(pokemon) {
-    const searchedPokemonInfo = document.querySelector(`[data-pokemon-id="${pokemon.id}"] .pokemon-title`);
+function updateSearchedPokemonDisplay(pokemonData) {
+    const searchedPokemonInfo = document.querySelector(`[data-pokemon-id="${pokemonData.id}"] .pokemon-title`);
 
     if (searchedPokemonInfo) {
         const favoriteIcon = searchedPokemonInfo.querySelector('span');
 
-        if (isFavorite(pokemon)) {
+        if (isFavorite(pokemonData)) {
             favoriteIcon.classList.remove('uil--favorite');
             favoriteIcon.classList.add('uim--favorite');
         } else {
@@ -54,41 +60,52 @@ function updateSearchedPokemonDisplay(pokemon) {
     }
 }
 
-function toggleFavorite(pokemon) {
+function toggleFavorite(pokemonData) {
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const index = favorites.findIndex(favorite => favorite.id === pokemon.id);
+    const index = favorites.findIndex(favorite => favorite.id === pokemonData.id);
 
     if (index === -1) {
-        favorites.push(pokemon);
+        const favoritePokemon = {
+            id: pokemonData.id,
+            sprites: pokemonData.sprites.front_default,
+            name: pokemonData.name,
+            types: pokemonData.types,
+            abilities: pokemonData.abilities.map(ability => ability.ability.name)
+        };
+        favorites.push(favoritePokemon);
     } else {
         favorites.splice(index, 1);
     }
 
     localStorage.setItem('favorites', JSON.stringify(favorites));
 
-    updateSearchedPokemonDisplay(pokemon);
+    updateSearchedPokemonDisplay(pokemonData);
+    displayFavoritePokemon();
 }
 
-function isFavorite(pokemon) {
+function isFavorite(pokemonData) {
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-    return favorites.some(favorite => favorite.id === pokemon.id);
+    return favorites.some(favorite => favorite.id === pokemonData.id);
 }
 
 function displayFavoritePokemon() {
     favoritesPokemonsContainer.innerHTML = '';
 
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const favorites = JSON.parse(localStorage.getItem('favorites'));
 
     favorites.forEach(pokemon => {
-        const pokemonInfo = displayPokemon(pokemon);
-        favoritesPokemonsContainer.appendChild(pokemonInfo);
+        console.log("informaçoes pokemon localstorage: ", pokemon)
 
-        updateSearchedPokemonDisplay(pokemon);
+        const pokemonInfo = displayPokemon(pokemon);
+
+        console.log(pokemonInfo)
+        favoritesPokemonsContainer.appendChild(pokemonInfo);
     });
 }
 
-window.addEventListener('DOMContentLoaded', displayFavoritePokemon);
+window.addEventListener('DOMContentLoaded', () => {
+    displayFavoritePokemon();
+});
 
 function displayPokemon(pokemon) {
     const pokemonInfoContainer = document.createElement('div');
@@ -97,20 +114,47 @@ function displayPokemon(pokemon) {
 
     const favoriteClass = isFavorite(pokemon) ? 'uim--favorite' : 'uil--favorite';
 
+    let typeList = '';
+    if (Array.isArray(pokemon.types)) {
+        typeList = pokemon.types.map(type => {
+            if (type && type.type && type.type.name) {
+                return `<p class="pokemon-type">${capitalizeFirstLetter(type.type.name)}</p>`;
+            } else {
+                return '';
+            }
+        }).join('');
+    }
+
+    let abilityList = '';
+    if (Array.isArray(pokemon.abilities)) {
+        abilityList = pokemon.abilities.map(skill => {
+            if (skill && skill.ability && skill.ability.name) {
+                return `<li class="skill">${capitalizeFirstLetter(skill.ability.name)}</li>`;
+            } else if (skill && skill.ability) {
+                return `<li class="skill">${capitalizeFirstLetter(skill.ability)}</li>`;
+            } else if (skill) {
+                return `<li class="skill">${capitalizeFirstLetter(skill)}</li>`;
+            } else {
+                return '';
+            }
+        }).join('');
+    }
+
     pokemonInfoContainer.innerHTML = `
-        <img src="${pokemon.sprites.front_default}">
+        <img src="${pokemon.sprites.front_default || pokemon.sprites}">
         <div class="pokemon-title">
             <h2 class="pokemon-name">${capitalizeFirstLetter(pokemon.name)}</h2>
             <span class="${favoriteClass}"></span>
         </div>
         <div class="pokemon-info">
             <div class="pokemon-type-container">
-                ${pokemon.types.map(type => `<p class="pokemon-type">Type: ${capitalizeFirstLetter(type.type.name)}</p>`).join('')}
+                <p>Type:</p>
+                ${typeList}
             </div>
             <div class="pokemon-skills">
                 <h3 class="skills">Skills</h3>
                 <ul class="pokemon-skills">
-                    ${pokemon.abilities.map(ability => `<li class="skill">${capitalizeFirstLetter(ability.ability.name)}</li>`).join('')}
+                ${abilityList}
                 </ul>
             </div>
         </div>
@@ -119,20 +163,18 @@ function displayPokemon(pokemon) {
     const favoriteIcon = pokemonInfoContainer.querySelector('.pokemon-title span');
     favoriteIcon.addEventListener('click', () => {
         toggleFavorite(pokemon);
-        displayFavoritePokemon();
     });
 
     return pokemonInfoContainer;
 }
 
-
 export async function searchPokemon(name) {
     const pokemonData = await fetchPokemon(name);
 
-    searchedPokemonContainer.innerHTML = '';
-
-    const pokemonElement = displayPokemon(pokemonData);
-    searchedPokemonContainer.appendChild(pokemonElement);
-
-    updateSearchedPokemonDisplay(pokemonData);
+    if (pokemonData) {
+        searchedPokemonContainer.innerHTML = '';
+        const pokemonElement = displayPokemon(pokemonData);
+        searchedPokemonContainer.appendChild(pokemonElement);
+        updateSearchedPokemonDisplay(pokemonData);
+    }
 }
