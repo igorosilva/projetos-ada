@@ -74,7 +74,7 @@ body {
 
 .pokemon-info-container {
     border-radius: 5px;
-    padding: 10px 30px;
+    padding: 10px 30px 20px;
     background-color: #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -104,13 +104,13 @@ body {
     gap: 5px;
 }
 
-.pokemon-skills {
+.pokemon-skills, .pokemon-types {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.skill {
+.skill, .pokemon-type {
     list-style: none;
 }
 

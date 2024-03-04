@@ -65,13 +65,15 @@ function toggleFavorite(pokemonData) {
     const index = favorites.findIndex(favorite => favorite.id === pokemonData.id);
 
     if (index === -1) {
-        const favoritePokemon = {
-            id: pokemonData.id,
-            sprites: pokemonData.sprites.front_default,
-            name: pokemonData.name,
-            types: pokemonData.types,
-            abilities: pokemonData.abilities.map(ability => ability.ability.name)
-        };
+        const favoritePokemon = new Pokemon(
+            pokemonData.id,
+            pokemonData.sprites.front_default,
+            pokemonData.name,
+            pokemonData.height,
+            pokemonData.weight,
+            pokemonData.types,
+            pokemonData.abilities.map(ability => ability.ability.name)
+        );
         favorites.push(favoritePokemon);
     } else {
         favorites.splice(index, 1);
@@ -118,7 +120,7 @@ function displayPokemon(pokemon) {
     if (Array.isArray(pokemon.types)) {
         typeList = pokemon.types.map(type => {
             if (type && type.type && type.type.name) {
-                return `<p class="pokemon-type">${capitalizeFirstLetter(type.type.name)}</p>`;
+                return `<li class="pokemon-type">${capitalizeFirstLetter(type.type.name)}</li>`;
             } else {
                 return '';
             }
@@ -140,6 +142,9 @@ function displayPokemon(pokemon) {
         }).join('');
     }
 
+    const adjustedHeight = pokemon.height / 10;
+    const adjustedWeight = pokemon.weight / 10;
+
     pokemonInfoContainer.innerHTML = `
         <img src="${pokemon.sprites.front_default || pokemon.sprites}">
         <div class="pokemon-title">
@@ -147,14 +152,20 @@ function displayPokemon(pokemon) {
             <span class="${favoriteClass}"></span>
         </div>
         <div class="pokemon-info">
+            <div class="pokemon-height-weight">
+                <p>Height: ${adjustedHeight}m</p>
+                <p>Weight: ${adjustedWeight}kg</p>
+            </div>
             <div class="pokemon-type-container">
-                <p>Type:</p>
-                ${typeList}
+                <h3>Type</h3>
+                <ul class="pokemon-types">
+                    ${typeList}
+                </ul>
             </div>
             <div class="pokemon-skills">
                 <h3 class="skills">Skills</h3>
                 <ul class="pokemon-skills">
-                ${abilityList}
+                    ${abilityList}
                 </ul>
             </div>
         </div>
