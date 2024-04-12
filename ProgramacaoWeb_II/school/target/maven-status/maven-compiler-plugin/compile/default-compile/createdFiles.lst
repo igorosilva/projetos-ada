@@ -1,0 +1,16 @@
+tech\ada\school\domain\dto\v1\ProfessorDto$ProfessorDtoBuilder.class
+tech\ada\school\domain\dto\ErrorMessage$ErrorMessageBuilder.class
+tech\ada\school\view\ProfessorController.class
+tech\ada\school\domain\dto\v1\ProfessorDto.class
+tech\ada\school\service\ProfessorService.class
+tech\ada\school\SchoolManagementApplication.class
+tech\ada\school\domain\dto\ErrorResponse.class
+tech\ada\school\domain\dto\ErrorMessage.class
+tech\ada\school\service\IAlunoService.class
+tech\ada\school\domain\dto\v1\AlunoDto.class
+tech\ada\school\service\AlunoService.class
+tech\ada\school\service\IProfessorService.class
+tech\ada\school\view\AlunoController.class
+tech\ada\school\view\GlobalExceptionHandler.class
+tech\ada\school\domain\dto\exception\NotFoundException.class
+tech\ada\school\domain\dto\v1\AlunoDto$AlunoDtoBuilder.class
